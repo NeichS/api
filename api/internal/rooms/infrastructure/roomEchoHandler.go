@@ -165,13 +165,6 @@ func (h *RoomEchoHandler) GetRoomByID(c echo.Context) error {
 
 func (h *RoomEchoHandler) GetRoomsByAdmin(c echo.Context) error {
 
-	// idParam := c.Param("id")
-	// idInput, err := strconv.ParseInt(idParam, 10, 64)
-	// if err != nil {
-	// 	invalidErr := &se.InvalidIDError{ID: idParam}
-	// 	return c.JSON(http.StatusBadRequest, map[string]string{"error": invalidErr.Error()})
-	// }
-
 	userIDStr, ok := c.Get("user_id").(string)
 	if !ok || userIDStr == "" {
 		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "usuario no autenticado"})

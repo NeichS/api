@@ -21,6 +21,8 @@ import (
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+
+	"net/http"
 )
 
 type EchoServer struct {
@@ -45,7 +47,11 @@ func (s *EchoServer) Start() {
 	s.app.Use(middleware.Logger())
 	s.db.GetDb().ShowSQL(true)
 
-	// s.app.Pre(middleware.HTTPSNonWWWRedirect()) a tener en cuenta para el futuro en caso de despliegue
+	s.app.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"http://localhost:4321"}, //permite aceptar peticiones del front
+		AllowMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodOptions},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAuthorization},
+	}))
 	
 	authKey := []byte(s.conf.SecretKey)
     store := sessions.NewCookieStore(authKey)
